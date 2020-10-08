@@ -70,9 +70,8 @@ class Client {
   }
 
   postServerCount(serverCount, secret) {
-    if (!serverCount) {
-      throw new TypeError('argument "serverCount" should be of the type "number" or be a number inside a string');
-    }
+    if (typeof(serverCount) != 'number') throw new TypeError('argument "serverCount" should be of the type "number"');
+    if (typeof(secret) != 'string') throw new TypeError('argument "secret" should be of the type "string"');
 
     Axios.put('https://disbots.gg/api/stats', {servers: serverCount}, {headers: {Authorization: secret}})
     .then(res => {
