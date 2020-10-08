@@ -26,5 +26,10 @@
   "bugs": {
     "url": "https://github.com/disbots-gg/disbots.js/issues"
   },
-  "homepage": "https://github.com/disbots-gg/disbots.js#readme"
+  "homepage": "https://github.com/disbots-gg/disbots.js#readme",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "discord.js": "^12.3.1",
+    "express": "^4.17.1"
+  }
 }
