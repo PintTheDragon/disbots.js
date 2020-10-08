@@ -8,13 +8,13 @@ export class Client {
 
     // require and validate client
     if (typeof(client) != 'object' || !client.guilds) {
-      throw {error: 'TypeError', message: 'argument "client" should be of the type "Discord.Client"'};
+      throw new TypeError('argument "client" should be of the type "Discord.Client"');
     }
     this.client = client;
 
     // require and validate secret
     if (typeof(secret) != 'string') {
-      throw {error: 'TypeError', message: 'argument "secret" should be of the type "string"'};
+      throw new TypeError('argument "secret" should be of the type "string"');
     }
     this.secret = secret;
 
@@ -25,12 +25,12 @@ export class Client {
 
     // optionalize and validate webhookPort
     if (webhookPort && typeof(webhookPort) != 'number') {
-      throw {error: 'TypeError', message: 'argument "webhookPort" should be of the type "number"'};
+      throw new TypeError('argument "webhookPort" should be of the type "number"');
     }
 
     // validate range
     if (webhookPort < 1 || webhookPort > 65535) {
-      throw {error: 'ValueError', message: 'argument "webhookPort" should be a number between 1 and 65535'};
+      throw new RangeError('argument "webhookPort" should be a number between 1 and 65535');
     }
     this.webhookPort = webhookPort;
 
@@ -41,7 +41,7 @@ export class Client {
 
     // validate webhookPath
     if (typeof(webhookPath) != 'string') {
-      throw {error: 'TypeError', message: 'argument "webhookPath" should be of the type "string"'};
+      throw new TypeError('argument "webhookPath" should be of the type "string"');
     }
     this.webhookPath = webhookPath;
 
@@ -70,7 +70,7 @@ export class Client {
 
   postServerCount(serverCount) {
     if (!serverCount) {
-      throw {error: 'TypeError', message: 'argument "serverCount" should be of the type "number" or be a number inside a string'};
+      throw new TypeError('argument "serverCount" should be of the type "number" or be a number inside a string');
     }
 
     Axios.put(`${this.base_url}/api/stats`, {headers: {Authorization: this.secret}, data: {servers: `${serverCount}`}})
@@ -79,10 +79,10 @@ export class Client {
     })
     .catch(e => {
       if (e.response) {
-        if (e.response.status == 401) throw {error: 'APIError', message: '401 Unauthorized (Your secret is invalid)'};
+        if (e.response.status == 401) throw new Error('401 Unauthorized (Your secret is invalid)');
       }
 
-      throw {error: 'APIError', message: 'Unknown error occurred, check debug attribute of thrown error', debug: e};
+      throw new Error(`Unknown error occurred: ${e}`);
     });
   }
 }
