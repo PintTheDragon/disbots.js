@@ -17,7 +17,9 @@
     "disbotsgg",
     "discord-bots",
     "discord.js",
-    "discord"
+    "discord",
+    "wrapper",
+    "disbots-api"
   ],
   "author": "Iapetus-11",
   "license": "MIT",
