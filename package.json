@@ -1,0 +1,28 @@
+{
+  "name": "disbots.js",
+  "version": "1.0.0",
+  "description": "The official JavaScript library for the disbots.gg API with webhooks support",
+  "main": "src/disbots.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/disbots-gg/disbots.js.git"
+  },
+  "keywords": [
+    "disbots",
+    "discordbots",
+    "disbots.gg",
+    "disbotsgg",
+    "discord-bots",
+    "discord.js",
+    "discord"
+  ],
+  "author": "Iapetus-11",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/disbots-gg/disbots.js/issues"
+  },
+  "homepage": "https://github.com/disbots-gg/disbots.js#readme"
+}
