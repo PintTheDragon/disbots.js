@@ -17,6 +17,7 @@ class Client {
       throw new TypeError('argument "secret" should be of the type "string"');
     }
     this.secret = secret;
+    console.log(this.secret);
 
     // optionalize and validate/uniform autopostStats
     this.autopostStats = Boolean(autopostStats);
