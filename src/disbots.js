@@ -44,6 +44,28 @@ export class Client {
       throw {error: 'TypeError', message: 'argument "webhookPath" should be of the type "string"'};
     }
     this.webhookPath = webhookPath;
+
+    // webhook listener will be set up
+    if (webhookPort) {
+      this.webhook_server = Express();
+
+      this.webhook_server.post(this.webhookPath, (req, res, next) => {
+        if (req.get('Authorization') != this.secret) {
+          res.status(401).end();
+          return;
+        }
+
+        let data = req.body;
+
+        if (req.body.type == 'like') {
+          this.client.emit('disbots_like', data);
+        } else {
+          this.client.emit('disbots_test', data);
+        }
+      });
+
+      this.webhook_server.listen(this.webhookPort, () => {});
+    }
   }
 
   postServerCount(serverCount) {
