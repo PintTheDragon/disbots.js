@@ -87,4 +87,4 @@ class Client {
   }
 }
 
-module.exports.Client = Client.constructor;
+module.exports.Client = Client;
