@@ -21,7 +21,6 @@ class Client {
     // optionalize and validate/uniform autopostStats
     this.autopostStats = Boolean(autopostStats);
     // if autopostStats make it post the count to api every 30 min
-    console.log(this.client.guilds.length);
     if (this.autopostStats) setInterval(this.postServerCount, 1000, this.client.guilds.cache.size); // *60*1000
 
     // optionalize and validate webhookPort
@@ -70,8 +69,6 @@ class Client {
   }
 
   postServerCount(serverCount) {
-    console.log('Posting server count...')
-
     if (!serverCount) {
       throw new TypeError('argument "serverCount" should be of the type "number" or be a number inside a string');
     }
