@@ -1,9 +1,14 @@
+const Discord = require('discord.js');
 const Express = require('express');
 const Axios = require('axios');
 
 
 export class Client {
-  constructor(secret, webhook_port, webhook_path) {
+  constructor(client, secret, webhook_port, webhook_path) {
+    if (typeof(client) != 'object') {
+      throw {error: 'TypeError', message: 'argument "client" should be of the type Discord.Client'};
+    }
+
     if (typeof(secret) != 'string') {
       throw {error: 'TypeError', message: 'argument "secret" should be of the type "string"'};
     }
@@ -18,15 +23,18 @@ export class Client {
 
     this.base_url = 'https://disbots.gg'
 
+    this.client = client;
     this.secret = secret;
     this.webhook_port = webhook_port;
     this.webhook_path = webhook_path;
   }
 
   postServerCount(serverCount) {
-    Axios.put(`${this.base_url}/api/stats`, {headers: {Authorization: this.secret}, data: {servers: serverCount}})
-    .then(resp => {
-      return {success: true, message: 'Posted server count to the API sucessfully'};
+    let trueServerCount = (serverCount ? serverCount: this.client.guilds.length);
+
+    Axios.put(`${this.base_url}/api/stats`, {headers: {Authorization: this.secret}, data: {servers: `${trueServerCount}`}})
+    .then(res => {
+      return {success: true, message: 'Posted server count to the API sucessfully', response: res};
     })
     .catch(e => {
       if (e.response) {
