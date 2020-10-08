@@ -72,8 +72,8 @@ export class Client {
     if (!serverCount) {
       throw new TypeError('argument "serverCount" should be of the type "number" or be a number inside a string');
     }
-
-    Axios.put(`${this.base_url}/api/stats`, {headers: {Authorization: this.secret}, data: {servers: `${serverCount}`}})
+    
+    Axios.put('https://disbots.gg/api/stats', {servers: '123'}, {headers: {Authorization: auth}});
     .then(res => {
       return {success: true, message: 'Posted server count to the API sucessfully', response: res};
     })
