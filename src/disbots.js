@@ -75,7 +75,7 @@ class Client {
       throw new TypeError('argument "serverCount" should be of the type "number" or be a number inside a string');
     }
 
-    Axios.put('https://disbots.gg/api/stats', {servers: '123'}, {headers: {Authorization: auth}})
+    Axios.put('https://disbots.gg/api/stats', {servers: '123'}, {headers: {Authorization: this.secret}})
     .then(res => {
       return {success: true, message: 'Posted server count to the API sucessfully', response: res};
     })
