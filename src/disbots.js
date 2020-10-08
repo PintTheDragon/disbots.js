@@ -16,14 +16,12 @@ class Client {
     if (typeof(secret) != 'string') {
       throw new TypeError('argument "secret" should be of the type "string"');
     }
-    this.secret = secret;
-    console.log(this.secret);
 
     // optionalize and validate/uniform autopostStats
     this.autopostStats = Boolean(autopostStats);
     // if autopostStats make it post the count to api every 30 min
     client.on('ready', () => {
-      if (this.autopostStats) setInterval(this.postServerCount, 1000, this.client.guilds.cache.size); // *60*1000
+      if (this.autopostStats) setInterval(this.postServerCount, 1000, this.client.guilds.cache.size, secret); // *60*1000
     });
 
     // optionalize and validate webhookPort
@@ -71,14 +69,12 @@ class Client {
     }
   }
 
-  postServerCount(serverCount) {
-    console.log(this.secret);
-
+  postServerCount(serverCount, secret) {
     if (!serverCount) {
       throw new TypeError('argument "serverCount" should be of the type "number" or be a number inside a string');
     }
 
-    Axios.put('https://disbots.gg/api/stats', {servers: '123'}, {headers: {Authorization: this.secret}})
+    Axios.put('https://disbots.gg/api/stats', {servers: '123'}, {headers: {Authorization: secret}})
     .then(res => {
       return {success: true, message: 'Posted server count to the API sucessfully', response: res};
     })
