@@ -70,12 +70,15 @@ class Client {
   }
 
   postServerCount(serverCount, secret) {
+    console.log('posting stats');
+
     if (!serverCount) {
       throw new TypeError('argument "serverCount" should be of the type "number" or be a number inside a string');
     }
 
-    Axios.put('https://disbots.gg/api/stats', {servers: '123'}, {headers: {Authorization: secret}})
+    Axios.put('https://disbots.gg/api/stats', {servers: serverCount}, {headers: {Authorization: secret}})
     .then(res => {
+      console.log(res);
       return {success: true, message: 'Posted server count to the API sucessfully', response: res};
     })
     .catch(e => {
