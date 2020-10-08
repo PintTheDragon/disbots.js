@@ -21,6 +21,7 @@ export class Client {
 
     // optionalize and validate/uniform autopostStats
     this.autopostStats = Boolean(autopostStats);
+    // if autopostStats make it post the count to api every 30 min
     if (this.autopostStats) setInterval(this.postServerCount, 30*60*1000, this.client.guilds.length);
 
     // optionalize and validate webhookPort
