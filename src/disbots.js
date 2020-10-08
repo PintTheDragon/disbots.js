@@ -2,7 +2,7 @@ const Express = require('express');
 const Axios = require('axios');
 
 
-export class Client {
+class Client {
   constructor(client, secret, autopostStats, webhookPort, webhookPath) {
     this.base_url = 'https://disbots.gg';
 
@@ -72,7 +72,7 @@ export class Client {
     if (!serverCount) {
       throw new TypeError('argument "serverCount" should be of the type "number" or be a number inside a string');
     }
-    
+
     Axios.put('https://disbots.gg/api/stats', {servers: '123'}, {headers: {Authorization: auth}});
     .then(res => {
       return {success: true, message: 'Posted server count to the API sucessfully', response: res};
@@ -86,3 +86,5 @@ export class Client {
     });
   }
 }
+
+export Client;
