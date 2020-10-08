@@ -21,7 +21,9 @@ class Client {
     // optionalize and validate/uniform autopostStats
     this.autopostStats = Boolean(autopostStats);
     // if autopostStats make it post the count to api every 30 min
-    if (this.autopostStats) setInterval(this.postServerCount, 1000, this.client.guilds.cache.size); // *60*1000
+    client.on('ready', () => {
+      if (this.autopostStats) setInterval(this.postServerCount, 1000, this.client.guilds.cache.size); // *60*1000
+    });
 
     // optionalize and validate webhookPort
     if (webhookPort && typeof(webhookPort) != 'number') {
