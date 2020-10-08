@@ -69,6 +69,8 @@ class Client {
   }
 
   postServerCount(serverCount) {
+    console.log('Posting server count...')
+
     if (!serverCount) {
       throw new TypeError('argument "serverCount" should be of the type "number" or be a number inside a string');
     }
