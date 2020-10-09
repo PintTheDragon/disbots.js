@@ -3,7 +3,7 @@ const Axios = require('axios');
 
 
 class Client {
-  constructor(client, secret, autopostStats, webhookPort, webhookPath) {
+  constructor(client, secret, autopostStats, webhookPort, webhookPath, verbose) {
     this.base_url = 'https://disbots.gg';
     this.postInterval = 1800*1000; // 30 minutes
 
@@ -20,21 +20,24 @@ class Client {
 
     // optionalize and validate/uniform autopostStats
     this.autopostStats = Boolean(autopostStats);
+
     // if autopostStats make it post the count to api every 30 min
-    client.on('ready', () => {
-      // detect sharding of the client
-      if (!this.client.shard) { // if there is no sharding
-        setInterval(this.postServerCount, this.postInterval, this.client.guilds.cache.size, secret);
-      } else { // if sharding was detected, then fetch and sum guild counts from each shard
-        setInterval(() => {
-          this.client.shard.fetchClientValues('guilds.cache.size')
-          .then(results => {
-            this.postServerCount(results.reduce((prev, val) => prev + val, 0));
-          })
-          .catch(e => {});
-        }, this.postInterval);
-      }
-    });
+    if (this.autopostStats) {
+      client.on('ready', () => {
+        // detect sharding of the client
+        if (!this.client.shard) { // if there is no sharding
+          setInterval(this.postServerCount, this.postInterval, this.client.guilds.cache.size, secret);
+        } else { // if sharding was detected, then fetch and sum guild counts from each shard
+          setInterval(() => {
+            this.client.shard.fetchClientValues('guilds.cache.size')
+            .then(results => {
+              this.postServerCount(results.reduce((prev, val) => prev + val, 0));
+            })
+            .catch(e => {});
+          }, this.postInterval);
+        }
+      });
+    }
 
     // optionalize and validate webhookPort
     if (webhookPort && typeof(webhookPort) != 'number') {
@@ -57,6 +60,9 @@ class Client {
       throw new TypeError('argument "webhookPath" should be of the type "string"');
     }
     this.webhookPath = webhookPath;
+
+    // optionalize verbose
+    this.verbose = Boolean(verbose);
 
     // webhook listener will be set up
     if (webhookPort) {
