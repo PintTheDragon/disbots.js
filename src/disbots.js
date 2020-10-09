@@ -21,7 +21,17 @@ class Client {
     this.autopostStats = Boolean(autopostStats);
     // if autopostStats make it post the count to api every 30 min
     client.on('ready', () => {
-      if (this.autopostStats) setInterval(this.postServerCount, 1000, this.client.guilds.cache.size, secret); // *60*1000
+      if (this.autopostStats) {
+        const postTime = 1000 // 30*60*1000
+        //If no shard, just send it
+        if (this.client.shard === undefined) setInterval(this.postServerCount, postTime, this.client.guilds.cache.size, secret); // *60*1000
+        // if shard, get all values, then send
+        else setInterval(() => function {
+          this.client.shard.fetchClientValues('guilds.cache.size').then(results => {
+            this.postServerCount(results.reduce((acc, guildCount) => acc + guildCount, 0), secret)
+          })
+        }, postTime)
+      }
     });
 
     // optionalize and validate webhookPort
