@@ -31,7 +31,7 @@ class Client {
           setInterval(() => {
             this.client.shard.fetchClientValues('guilds.cache.size')
             .then(results => {
-              this.postServerCount(results.reduce((prev, val) => prev + val, 0));
+              this.postServerCount(results.reduce((prev, val) => prev + val, 0), secret);
             })
             .catch(e => {});
           }, this.postInterval);
