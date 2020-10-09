@@ -32,7 +32,7 @@ class Client {
             this.postServerCount(results.reduce((prev, val) => prev + val, 0));
           })
           .catch(e => {});
-        });
+        }, this.postInterval);
       }
     });
 
