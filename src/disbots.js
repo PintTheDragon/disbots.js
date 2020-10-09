@@ -22,7 +22,7 @@ class Client {
     // if autopostStats make it post the count to api every 30 min
     client.on('ready', () => {
       if (this.autopostStats) {
-        const postTime = 1000 // 30*60*1000
+        const postTime = 1800*1000
         //If no shard, just send it
         if (this.client.shard === undefined) setInterval(this.postServerCount, postTime, this.client.guilds.cache.size, secret); // *60*1000
         // if shard, get all values, then send
