@@ -22,18 +22,18 @@ class Client {
     this.autopostStats = Boolean(autopostStats);
     // if autopostStats make it post the count to api every 30 min
     client.on('ready', () => {
-        // detect sharding of the client
-        if (!this.client.shard) { // if there is no sharding
-          setInterval(this.postServerCount, this.postInterval, this.client.guilds.cache.size, secret);
-        } else { // if sharding was detected, then fetch and sum guild counts from each shard
-          setInterval(() => {
-            this.client.shard.fetchClientValues('guilds.cache.size')
-            .then(results => {
-              this.postServerCount(results.reduce((prev, val) => prev + val, 0));
-            })
-            .catch(e => {});
-          });
-        }
+      // detect sharding of the client
+      if (!this.client.shard) { // if there is no sharding
+        setInterval(this.postServerCount, this.postInterval, this.client.guilds.cache.size, secret);
+      } else { // if sharding was detected, then fetch and sum guild counts from each shard
+        setInterval(() => {
+          this.client.shard.fetchClientValues('guilds.cache.size')
+          .then(results => {
+            this.postServerCount(results.reduce((prev, val) => prev + val, 0));
+          })
+          .catch(e => {});
+        });
+      }
     });
 
     // optionalize and validate webhookPort
