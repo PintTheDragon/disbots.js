@@ -5,6 +5,7 @@ const Axios = require('axios');
 class Client {
   constructor(client, secret, autopostStats, webhookPort, webhookPath) {
     this.base_url = 'https://disbots.gg';
+    this.postInterval = 1800*1000; // 30 minutes
 
     // require and validate client
     if (typeof(client) != 'object' || !client.guilds) {
@@ -21,17 +22,18 @@ class Client {
     this.autopostStats = Boolean(autopostStats);
     // if autopostStats make it post the count to api every 30 min
     client.on('ready', () => {
-      if (this.autopostStats) {
-        const postTime = 1800*1000
-        //If no shard, just send it
-        if (this.client.shard === undefined) setInterval(this.postServerCount, postTime, this.client.guilds.cache.size, secret); // *60*1000
-        // if shard, get all values, then send
-        else setInterval(() => function {
-          this.client.shard.fetchClientValues('guilds.cache.size').then(results => {
-            this.postServerCount(results.reduce((acc, guildCount) => acc + guildCount, 0), secret)
-          })
-        }, postTime)
-      }
+        // detect sharding of the client
+        if (!this.client.shard) { // if there is no sharding
+          setInterval(this.postServerCount, this.postInterval, this.client.guilds.cache.size, secret);
+        } else { // if sharding was detected, then fetch and sum guild counts from each shard
+          setInterval(() => {
+            this.client.shard.fetchClientValues('guilds.cache.size')
+            .then(results => {
+              this.postServerCount(results.reduce((prev, val) => prev + val, 0));
+            })
+            .catch(e => {});
+          });
+        }
     });
 
     // optionalize and validate webhookPort
