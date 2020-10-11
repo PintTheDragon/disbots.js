@@ -1,6 +1,7 @@
 const Express = require('express');
 const Axios = require('axios');
-
+const crypto = require("crypto");
+const bodyParser = require('body-parser');
 
 class Client {
   constructor(client, secret, autopostStats, webhookPort, webhookPath, verbose) {
@@ -67,14 +68,15 @@ class Client {
     // webhook listener will be set up
     if (webhookPort) {
       this.webhook_server = Express();
+      this.webhook_server.use(bodyParser.text());
 
       this.webhook_server.post(this.webhookPath, (req, res, next) => {
-        if (req.get('Authorization') != this.secret) {
+        if (req.get('Authorization') != crypto.createHmac("sha256", this.secret).update(req.body).digest('hex')) {
           res.status(401).end();
           return;
         }
 
-        let data = req.body;
+        let data = JSON.decode(req.body);
 
         if (req.body.type == 'like') {
           this.client.emit('disbots_like', data);
@@ -91,7 +93,8 @@ class Client {
     if (typeof(serverCount) != 'number') throw new TypeError('argument "serverCount" should be of the type "number"');
     if (typeof(secret) != 'string') throw new TypeError('argument "secret" should be of the type "string"');
 
-    Axios.put('https://disbots.gg/api/stats', {servers: serverCount}, {headers: {Authorization: secret}})
+    let data = JSON.stringify({servers: serverCount});
+    Axios.put('https://disbots.gg/api/stats', data, {headers: {"Authorization": crypto.createHmac("sha256", this.secret).update(data).digest('hex'), "Content-Type": "application/json"}})
     .then(res => {
       return {success: true, message: 'Posted server count to the API sucessfully', response: res};
     })
